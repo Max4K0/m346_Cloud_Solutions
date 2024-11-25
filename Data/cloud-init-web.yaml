@@ -7,10 +7,10 @@ users:
     shell: /bin/bash
     ssh_authorized_keys:
       - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDiFF0IevVrnztLwZXbnq86xovqqQK5LCgeeoZsQapdaWAqDjIDtFUCRaTA1mr4Mj1JvBk+brioDjI5RuV5Ym0mbBtsswXPEJFiLUpp+1knCSldYlZuQXjkpZKBh1Ib8vb3QPuWxcK5eJeXRkjex92l3x4ntuezS3lvMRjHhyshYkd2VweTvMfgw/6SUt2xX5aiHA+oJ5fWySaSiOt2NgfXw/o9iodOACYu+lO3FS7UMapgis7fGbTa36P4pcGDvRkgx3ysXUXFdfkomaayc10PxYE3fhg03ANpvwF1GmRvpicMNj5YKHQY5z/334Er0OSOsC7Pu1i1euF6aq1RE7lj Max-aws-key
-      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCpYQGN6ZsQ+5UJzDz05HogRp0sTBfaore2SjtIpyIc0hyHRQMjw6zeG7+BHglRej/2nXKkRVvXfAzzYQoNxvh38ZcXaqp600UQ1T8zmlU700jvSBew9/UxyvGC9w0iClq/73tMX7k38dUEJTrNVhatHlZYdjbDxKp6mwIFiFpDQnyz3FKfc26gl+wF5DFCcIiRQyIS7iG5G+3drBWwt7FNYxAgcUHZCCx9cyOJw8VqOB0JxvztBXbOS2PJINAaa4jpGIP4n+iLhGY0q87fizLFEz9A8MX3hQVqLXOH1XDtQybv+J4qOOYSAr58ASEkpYxZyJyRxnPfXJyCPs0keIvl Teacher-keypair1
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC0WGP1EZykEtv5YGC9nMiPFW3U3DmZNzKFO5nEu6uozEHh4jLZzPNHSrfFTuQ2GnRDSt+XbOtTLdcj26+iPNiFoFha42aCIzYjt6V8Z+SQ9pzF4jPPzxwXfDdkEWylgoNnZ+4MG1lNFqa8aO7F62tX0Yj5khjC0Bs7Mb2cHLx1XZaxJV6qSaulDuBbLYe8QUZXkMc7wmob3PM0kflfolR3LE7LResIHWa4j4FL6r5cQmFlDU2BDPpKMFMGUfRSFiUtaWBNXFOWHQBC2+uKmuMPYP4vJC9sBgqMvPN/X2KyemqdMvdKXnCfrzadHuSSJYEzD64Cve5Zl9yVvY4AqyBD Teacher-keypair1
 
 ssh_pwauth: false
-disable_root: false 
+disable_root: false
 
 package_update: true
 package_upgrade: true
@@ -24,13 +24,36 @@ packages:
   - adminer
 
 write_files:
-  - path: /var/www/html/index.html
+  - path: /var/www/html/db.php
     content: |
       <html>
-      <head><title>hi</title></head>
-      <body>
-        <h1>Willkommen beim Web Server.</h1>
-      </body>
+        <head></head>
+        <body>
+            Diese Seite macht eine Abfrage auf die Datenbank. <br />
+            Das ausgeführte Query ist: <i>select Host, User from mysql.user;</i><br /><br />
+            Das Resultat: <br />
+          <?php
+            //database
+            $servername = "172.31.83.107";
+            $username = "admin";
+            $password = "max";
+            $dbname = "mysql";
+        
+            // Create connection
+            $conn = new mysqli($servername, $username, $password, $dbname);
+            // Check connection
+            if ($conn->connect_error) {
+              die(" Connection failed: " . $conn->connect_error);
+            }
+          
+            $sql = "select Host, User from mysql.user;";
+            $result = $conn->query($sql);
+            while($row = $result->fetch_assoc()){
+              echo("<li>" . $row["Host"] . " / " . $row["User"] . "</li>");
+            }
+            //var_dump($result);
+          ?>
+        </body>
       </html>
 
   - path: /var/www/html/info.php
