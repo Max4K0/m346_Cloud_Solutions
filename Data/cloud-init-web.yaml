@@ -1,0 +1,42 @@
+#cloud-config
+users:
+  - name: ubuntu
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    groups: users, admin
+    home: /home/ubuntu
+    shell: /bin/bash
+    ssh_authorized_keys:
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDiFF0IevVrnztLwZXbnq86xovqqQK5LCgeeoZsQapdaWAqDjIDtFUCRaTA1mr4Mj1JvBk+brioDjI5RuV5Ym0mbBtsswXPEJFiLUpp+1knCSldYlZuQXjkpZKBh1Ib8vb3QPuWxcK5eJeXRkjex92l3x4ntuezS3lvMRjHhyshYkd2VweTvMfgw/6SUt2xX5aiHA+oJ5fWySaSiOt2NgfXw/o9iodOACYu+lO3FS7UMapgis7fGbTa36P4pcGDvRkgx3ysXUXFdfkomaayc10PxYE3fhg03ANpvwF1GmRvpicMNj5YKHQY5z/334Er0OSOsC7Pu1i1euF6aq1RE7lj Max-aws-key
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCpYQGN6ZsQ+5UJzDz05HogRp0sTBfaore2SjtIpyIc0hyHRQMjw6zeG7+BHglRej/2nXKkRVvXfAzzYQoNxvh38ZcXaqp600UQ1T8zmlU700jvSBew9/UxyvGC9w0iClq/73tMX7k38dUEJTrNVhatHlZYdjbDxKp6mwIFiFpDQnyz3FKfc26gl+wF5DFCcIiRQyIS7iG5G+3drBWwt7FNYxAgcUHZCCx9cyOJw8VqOB0JxvztBXbOS2PJINAaa4jpGIP4n+iLhGY0q87fizLFEz9A8MX3hQVqLXOH1XDtQybv+J4qOOYSAr58ASEkpYxZyJyRxnPfXJyCPs0keIvl Teacher-keypair1
+
+ssh_pwauth: false
+disable_root: false 
+
+package_update: true
+package_upgrade: true
+packages:
+  - curl
+  - wget
+  - apache2
+  - php
+  - libapache2-mod-php
+  - php-mysql
+  - adminer
+
+write_files:
+  - path: /var/www/html/index.html
+    content: |
+      <html>
+      <head><title>hi</title></head>
+      <body>
+        <h1>Willkommen beim Web Server.</h1>
+      </body>
+      </html>
+
+  - path: /var/www/html/info.php
+    content: |
+      <?php phpinfo(); ?>
+
+runcmd:
+  - sudo a2enconf adminer
+  - sudo systemctl restart apache2
