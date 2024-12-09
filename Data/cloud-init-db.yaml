@@ -13,7 +13,6 @@ ssh_pwauth: false
 disable_root: false 
 
 package_update: true
-package_upgrade: true
 packages:
   - curl
   - wget
@@ -24,6 +23,5 @@ runcmd:
   - sudo sed -i 's/127.0.0.1/0.0.0.0/g' /etc/mysql/mariadb.conf.d/50-server.cnf
   - sudo systemctl restart mariadb
   #neuer User
-  - mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED BY 'max';"
   - mysql -e "CREATE USER 'admin'@'%' IDENTIFIED BY 'max';"
   - mysql -e "GRANT ALL PRIVILEGES ON *.* TO 'admin'@'%'; FLUSH PRIVILEGES;"

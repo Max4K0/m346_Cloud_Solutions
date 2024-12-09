@@ -34,7 +34,7 @@ write_files:
             Das Resultat: <br />
           <?php
             //database
-            $servername = "172.31.83.107";
+            $servername = "172.31.96.20";
             $username = "admin";
             $password = "max";
             $dbname = "mysql";
